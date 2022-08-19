@@ -1,6 +1,6 @@
-# Flask example
+# ScoreCard Flask Project
 
-Using Flask to build a Restful API Server with Swagger document.
+Using Flask to build a Restful API Server for ScoreCard.
 
 Integration with Flask-restplus, Flask-Cors, Flask-Testing, Flask-SQLalchemy,and Flask-OAuth extensions.
 
@@ -9,12 +9,7 @@ Integration with Flask-restplus, Flask-Cors, Flask-Testing, Flask-SQLalchemy,and
 
 - SQL ORM: [Flask-SQLalchemy](http://flask-sqlalchemy.pocoo.org/2.1/)
 
-- Testing: [Flask-Testing](http://flask.pocoo.org/docs/0.12/testing/)
-
-- OAuth: [Flask-OAuth](https://pythonhosted.org/Flask-OAuth/)
-
-- ESDAO: [elasticsearch](https://elasticsearch-py.readthedocs.io/en/master/) , [elasticsearch-dsl](http://elasticsearch-dsl.readthedocs.io/en/latest/index.html)
-
+- OAuth: [Flask-OAuth](https://pythonhosted.org/Flask-OAuth/) [Flask-Dance](https://flask-dance.readthedocs.io/en/latest/) 
 
 ## Installation
 
@@ -28,24 +23,24 @@ $ pip install -r requirements.txt
 ```
 .
 |──────app/
-| |────__init__.py
-| |────api/
-| | |────__init__.py
-| | |────cve/
-| | |────user/
-| | |────oauth/
-| |──────config.Development.cfg
-| |──────config.Production.cfg
-| |──────config.Testing.cfg
-| |────dao/
-| |────model/
-| |────oauth/
-| |────util/
-|──────run.py
-|──────tests/
+| |────app.yaml
+| |────templates/
+| | |────index.html
+| | |────...html
+| | |────...html
+| |────static/
+| |────models.py
+| |────requirements.txt
+| |────oauth.py
+| |────credentials.json
+| |────config.py
+| |────cli.py
+| |────app.py
+|──────venv/
 
+
+change app.py to main.py to run in production for google cloud
 ```
-
 
 ## Flask Configuration
 
@@ -64,25 +59,8 @@ app = Flask(__name__ )
 app.config.from_pyfile('config.Development.cfg')
 ```
 
-#### cfg example
-
-```
-
-##Flask settings
-DEBUG = True  # True/False
-TESTING = False
-
-##SWAGGER settings
-SWAGGER_DOC_URL = '/api'
-
-....
-
-
-```
-
 #### Builtin Configuration Values
 
-SERVER_NAME: the name and port number of the server. 
 
 JSON_SORT_KEYS : By default Flask will serialize JSON objects in a way that the keys are ordered.
 
@@ -90,28 +68,26 @@ JSON_SORT_KEYS : By default Flask will serialize JSON objects in a way that the 
 
 
 ### OAuth Setup
-add your `client_id` and `client_secret` into config file.
-
-### ESDAO Setup
-add your `ES host` and `ES port` into config file 
-
-
+credintials.json has keys
 
  
 ## Run Flask
 ### Run flask for develop
 ```
-$ python webapp/run.py
+$ cd TAIV_Score
+$ source venv/bin/activate
+$ cd app
+$ flask run
 ```
 In flask, Default port is `5000`
 
-Swagger document page:  `http://127.0.0.1:5000/api`
+Scorecard default page:  `http://127.0.0.1:5000/`
 
 ### Run flask for production
 
 ** Run with gunicorn **
 
-In  webapp/
+In  app/
 
 ```
 $ gunicorn -w 4 -b 127.0.0.1:5000 run:app
@@ -121,52 +97,17 @@ $ gunicorn -w 4 -b 127.0.0.1:5000 run:app
 * -w : number of worker
 * -b : Socket to bind
 
-
-### Run with Docker
-
-```
-$ docker build -t flask-example .
-
-$ docker run -p 5000:5000 --name flask-example flask-example 
- 
-```
-
-In image building, the webapp folder will also add into the image
-
-
-## Unittest
-```
-$ nosetests webapp/ --with-cov --cover-html --cover-package=app
-```
-- --with-cov : test with coverage
-- --cover-html: coverage report in html format
-
 ## Reference
 
 Offical Website
 
 - [Flask](http://flask.pocoo.org/)
-- [Flask Extension](http://flask.pocoo.org/extensions/)
 - [Flask restplus](http://flask-restplus.readthedocs.io/en/stable/)
 - [Flask-SQLalchemy](http://flask-sqlalchemy.pocoo.org/2.1/)
 - [Flask-OAuth](https://pythonhosted.org/Flask-OAuth/)
-- [elasticsearch-dsl](http://elasticsearch-dsl.readthedocs.io/en/latest/index.html)
 - [gunicorn](http://gunicorn.org/)
 
 Tutorial
 
 - [Flask Overview](https://www.slideshare.net/maxcnunes1/flask-python-16299282)
 - [In Flask we trust](http://igordavydenko.com/talks/ua-pycon-2012.pdf)
-
-[Wiki Page](https://github.com/tsungtwu/flask-example/wiki)
-
-
-
-## Changelog
-
-- Version 2.3 : add dockerfile
-- Version 2.2 : add ESDAO module
-- Version 2.1 : add OAuth extension: FLASK-OAuth, and google oauth example
-- Version 2.0 : add SQL ORM extension: FLASK-SQLAlchemy
-- Version 1.1 : update nosetest
-- Version 1.0 : basic flask-example with Flask-Restplus, Flask-Tesintg
